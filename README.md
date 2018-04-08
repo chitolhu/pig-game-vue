@@ -1,6 +1,6 @@
 # pig-game-vue
 
-> A Vue Pig Game implementation. 
+> A Vue.js Pig Dice Game implementation. 
 
 ## Build Setup
 

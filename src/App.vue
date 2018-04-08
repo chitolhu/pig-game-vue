@@ -1,40 +1,55 @@
 <template>
   <div id="app">
-    <img :src="require(`./assets/ou-dice-${number}.png`)">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <button @click="throwDice()">Throw Dice</button>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
+    <div class="container">
+      <div class="columns">
+        <player :data="getPlayers[0]"></player>
+        <div class="dice column content">
+           <p>
+            <button @click="newGame()" class="button is-info is-medium">New Game</button>
+          </p> 
+          <p>
+            <!-- Dice img change with diceValue number -->
+            <img :src="require(`./assets/ou-dice-${diceValue}.png`)">
+          </p>
+          <p>
+            <button :disabled="hasWinner" @click="throwDiceMutation()" class="button is-primary is-outlined is-medium">Throw dice</button>
+            <button :disabled="hasWinner" @click="onHold()" class="button is-warning is-medium">Hold</button>
+          </p>          
+        </div>
+        <player :data="getPlayers[1]"></player>
+      </div>
+    </div>
   </div>
 </template>
 
+
 <script>
+
+import Player from './components/Player'
+import { mapMutations } from 'vuex'
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'app',
+  components: {Player},
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App',
-      number: 1
+      msg: 'Pig Game'
     }
   }, 
   methods: {
-    throwDice: function () {
-      console.log('click')
-      this.number = Math.floor(Math.random() * 6) + 1 
-      
-    }
+    ...mapMutations([
+      'throwDiceMutation',
+      'newGame',
+      'onHold'
+    ])
+  },
+  computed: {
+    ...mapGetters([
+      'diceValue',
+      'getPlayers',
+      'hasWinner'
+    ])
   }
 }
 </script>
@@ -50,23 +65,12 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+
+.dice {
+    img {
+      max-width: 200px;
+    }
+  }
 }
 
-h1, h2 {
-  font-weight: normal;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
-}
 </style>
